@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>主界面--<span th:text="'登录账号：'+${userInfo.username}+'--名称：'+${userInfo.name}">user</span></h3>
+<a href="/logout">退出</a>
+
+<hr />
+
+
+<!-- 这些实际从数据库中进行查询，可以在 -->
+<h5>这是通过shiro标签的方式;</h5>
+<p shiro:hasRole="admin">
+    <a>管理员角色</a>
+</p>
+
+<p shiro:hasPermission="userInfo:query">
+    <a href="/userInfo/userList">用户查询</a>
+</p>
+<p shiro:hasPermission="userInfo:add">
+    <a href="/userInfo/userAdd">用户添加</a>
+</p>
+
+
+<hr />
+<h5>从数据库加载菜单</h5>
+<div th:each="roleList:${userInfo.roleList}">
+    <span th:text="${roleList.description}"></span>
+    <!-- 角色下所有的所有菜单,实际开发中，只需要获取所有的权限就可以了，无所谓是哪个角色的； -->
+    <p style="color:blue;margin-left:30px;" th:each="permission:${roleList.permissions}">
+        <a th:href="${permission.url}" th:text="${permission.name}"></a>
+    </p>
+</div>
+
+</body>
+</html>
